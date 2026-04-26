@@ -9,11 +9,12 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-       
+        agent.SetDestination(target.position);
+
     }
 
-    private void Update()
-    {
-        agent.SetDestination(target.position);
-    }
+    //private void Update()
+    //{
+    //    agent.SetDestination(target.position);
+    //}
 }
