@@ -38,8 +38,8 @@ public class Spawner : MonoBehaviour
         NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
         if (agent != null)
         {
-            agent.speed = Random.Range(1.5f, 3.0f);
-            agent.acceleration = Random.Range(15f, 20f);
+            agent.speed = Random.Range(1f, 2.0f);
+            agent.acceleration = Random.Range(10f, 15f);
             agent.angularSpeed = 200f;
             agent.stoppingDistance = 0.5f;
             agent.autoBraking = false;
