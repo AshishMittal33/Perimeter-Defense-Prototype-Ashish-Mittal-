@@ -31,6 +31,10 @@ public class SentryDetection : MonoBehaviour
             RotateTowardsTarget();
             Shoot();
         }
+        else
+        {
+            DisableLaser();
+        }
     }
 
     void DetectEnemies()
@@ -80,6 +84,11 @@ public class SentryDetection : MonoBehaviour
 
     void Shoot()
     {
+        if (currentTarget == null)
+        {
+            DisableLaser();
+            return;
+        }
         fireTimer += Time.deltaTime;
 
         if (fireTimer >= 1f / fireRate)
@@ -101,7 +110,7 @@ public class SentryDetection : MonoBehaviour
                 }
             }
 
-            // 🔥 Draw laser
+            
             laser.SetPosition(0, start);
             laser.SetPosition(1, end);
 
@@ -113,5 +122,11 @@ public class SentryDetection : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
-    
+
+    void DisableLaser()
+    {
+        laser.SetPosition(0, Vector3.zero);
+        laser.SetPosition(1, Vector3.zero);
+    }
+
 }
