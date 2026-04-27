@@ -21,6 +21,7 @@ The focus of this prototype is **AI behavior, mathematical logic, and system des
 
 * 🌐 **WebGL Build:** [Play in Browser](https://perimeterdefenseprototypeashish.netlify.app/)
 * 💻 **Windows Build:** [Download EXE](https://drive.google.com/drive/folders/1tqCgUgOsWkBXAN8h5-CZUb4GpkIyU6bd?usp=sharing)
+* Demo Video (YouTube): https://youtu.be/amPEQl-oRAs
 
 ---
 
