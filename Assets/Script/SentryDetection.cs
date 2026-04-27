@@ -13,6 +13,7 @@ public class SentryDetection : MonoBehaviour
 
     private float fireTimer;
     public LineRenderer laser;
+    public AudioSource gunAudio;
 
     public enum TargetPriority
     {
@@ -34,6 +35,7 @@ public class SentryDetection : MonoBehaviour
         else
         {
             DisableLaser();
+            StopAudio();
         }
     }
 
@@ -87,33 +89,48 @@ public class SentryDetection : MonoBehaviour
         if (currentTarget == null)
         {
             DisableLaser();
+            StopAudio();
             return;
         }
+
         fireTimer += Time.deltaTime;
 
-        if (fireTimer >= 1f / fireRate)
+        Vector3 start = transform.position + new Vector3(0, 0.35f, 0);
+        Vector3 end = start + transform.forward * detectionRadius;
+
+        RaycastHit hit;
+
+        bool isHittingEnemy = false;
+
+        if (Physics.Raycast(start, transform.forward, out hit, detectionRadius))
         {
-            fireTimer = 0f;
+            end = hit.point;
 
-            RaycastHit hit;
-
-            Vector3 start = transform.position + new Vector3(0, 0.35f, 0);
-            Vector3 end = start + transform.forward * detectionRadius;
-
-            if (Physics.Raycast(start, transform.forward, out hit, detectionRadius))
+            if (hit.collider.CompareTag("Enemy"))
             {
-                end = hit.point;
+                isHittingEnemy = true;
 
-                if (hit.collider.CompareTag("Enemy"))
+                if (fireTimer >= 1f / fireRate)
                 {
+                    fireTimer = 0f;
                     hit.collider.GetComponent<Health>().TakeDamage(damage);
                 }
             }
+        }
 
-            
-            laser.SetPosition(0, start);
-            laser.SetPosition(1, end);
+        
+        laser.SetPosition(0, start);
+        laser.SetPosition(1, end);
 
+       
+        if (isHittingEnemy)
+        {
+            if (!gunAudio.isPlaying)
+                gunAudio.Play();
+        }
+        else
+        {
+            StopAudio();
         }
     }
 
@@ -123,6 +140,11 @@ public class SentryDetection : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 
+    void StopAudio()
+    {
+        if (gunAudio.isPlaying)
+            gunAudio.Stop();
+    }
     void DisableLaser()
     {
         laser.SetPosition(0, Vector3.zero);
