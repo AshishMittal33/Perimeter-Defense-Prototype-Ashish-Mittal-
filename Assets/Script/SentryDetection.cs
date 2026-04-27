@@ -12,6 +12,7 @@ public class SentryDetection : MonoBehaviour
     public float damage = 25f;
 
     private float fireTimer;
+    public LineRenderer laser;
 
     public enum TargetPriority
     {
@@ -79,7 +80,6 @@ public class SentryDetection : MonoBehaviour
 
     void Shoot()
     {
-
         fireTimer += Time.deltaTime;
 
         if (fireTimer >= 1f / fireRate)
@@ -87,16 +87,25 @@ public class SentryDetection : MonoBehaviour
             fireTimer = 0f;
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, detectionRadius))
+
+            Vector3 start = transform.position + new Vector3(0, 0.35f, 0);
+            Vector3 end = start + transform.forward * detectionRadius;
+
+            if (Physics.Raycast(start, transform.forward, out hit, detectionRadius))
             {
+                end = hit.point;
+
                 if (hit.collider.CompareTag("Enemy"))
                 {
                     hit.collider.GetComponent<Health>().TakeDamage(damage);
                 }
             }
-        }
 
-        Debug.DrawRay(transform.position + Vector3.up, transform.forward * detectionRadius, Color.green);
+            // 🔥 Draw laser
+            laser.SetPosition(0, start);
+            laser.SetPosition(1, end);
+
+        }
     }
 
     void OnDrawGizmosSelected()
@@ -104,4 +113,5 @@ public class SentryDetection : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
+    
 }
